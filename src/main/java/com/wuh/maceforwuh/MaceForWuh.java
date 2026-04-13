@@ -16,7 +16,7 @@ public class MaceForWuh extends JavaPlugin implements CommandExecutor {
     public void onEnable() {
         getLogger().info(ChatColor.GOLD + "=== Wuh's Mace Plugin Enabled ===");
         
-        // Register event listener
+      
         getServer().getPluginManager().registerEvents(new MaceListener(this), this);
         
         // Register command
