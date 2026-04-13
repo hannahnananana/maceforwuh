@@ -1,0 +1,10 @@
+name: Wuh's Mace
+version: 1.0.0
+main: com.wuh.maceforwuh.MaceForWuh
+description: A powerful Minecraft plugin featuring Wuh's Mace
+authors:
+  - hannahnananana
+commands:
+  wuhsmace:
+    description: Get Wuh's Mace
+    usage: /wuhsmace
