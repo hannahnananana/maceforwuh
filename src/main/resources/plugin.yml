@@ -1,10 +1,12 @@
-name: Wuh's Mace
-version: 1.0.0
+name: MaceForWuh
+version: 1.0
+author: Wuh
 main: com.wuh.maceforwuh.MaceForWuh
-description: A powerful Minecraft plugin featuring Wuh's Mace
-authors:
-  - hannahnananana
+api-version: 1.20
+description: A custom mace plugin that shatters shields!
+
 commands:
   wuhsmace:
-    description: Get Wuh's Mace
+    description: Gives you Wuh's Mace.
     usage: /wuhsmace
+    permission: wuhsmace.give
