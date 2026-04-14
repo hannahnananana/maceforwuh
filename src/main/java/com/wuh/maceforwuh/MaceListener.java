@@ -42,7 +42,7 @@ public class MaceListener implements Listener {
 
         // Check if damager is holding Wuh's Mace
         ItemStack heldItem = damager.getInventory().getItemInMainHand();
-        if (heldItem.getType() != Material.MACE || !isMace(heldItem)) {
+        if (!isWuhsMace(heldItem)) {
             return;
         }
 
