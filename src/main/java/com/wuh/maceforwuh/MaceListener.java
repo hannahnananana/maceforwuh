@@ -1,13 +1,14 @@
 package com.wuh.maceforwuh;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
-import net.md_5.bungee.api.ChatColor;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,13 +33,13 @@ public class MaceListener implements Listener {
         Player damager = (Player) event.getDamager();
         Player shieldHolder = (Player) event.getEntity();
 
-        // 1. Check if it's the custom item
+        // 1. Check if it's the custom item using CustomModelData
         ItemStack heldItem = damager.getInventory().getItemInMainHand();
         if (!isWuhsMace(heldItem)) {
             return;
         }
 
-        // 2. Check if the damager is falling (Critting)
+        // 2. Check if the damager is falling
         if (!isFalling(damager)) {
             return;
         }
@@ -57,22 +58,21 @@ public class MaceListener implements Listener {
             if (currentTime - lastUse < COOLDOWN_MS) {
                 long remaining = (COOLDOWN_MS - (currentTime - lastUse)) / 1000;
                 damager.sendMessage(ChatColor.RED + "Shield break on cooldown! (" + remaining + "s)");
-                return; // Allow normal damage, just don't break the shield
+                return; 
             }
         }
 
         // 5. BREAK THE SHIELD
-        // We find the shield (could be main hand or offhand)
         ItemStack main = shieldHolder.getInventory().getItemInMainHand();
         ItemStack off = shieldHolder.getInventory().getItemInOffHand();
 
-        if (main.getType() == Material.SHIELD) {
-            main.setAmount(0);
-        } else if (off.getType() == Material.SHIELD) {
-            off.setAmount(0);
+        if (main != null && main.getType() == Material.SHIELD) {
+            shieldHolder.getInventory().setItemInMainHand(null); // Cleaner than setAmount(0)
+        } else if (off != null && off.getType() == Material.SHIELD) {
+            shieldHolder.getInventory().setItemInOffHand(null);
         }
         
-        // 6. Launch damager upward (1.2 is roughly 5-6 blocks)
+        // 6. Launch damager upward
         damager.setVelocity(new Vector(0, 1.2, 0));
 
         // Set cooldown and notify
@@ -80,19 +80,20 @@ public class MaceListener implements Listener {
         damager.sendMessage(ChatColor.GOLD + "SHIELD CRUSHED!");
         shieldHolder.sendMessage(ChatColor.RED + "Your shield was shattered!");
 
-        // Cancel the actual heart damage so the shield break is the primary effect
         event.setDamage(0);
     }
 
     private boolean isWuhsMace(ItemStack item) {
-        if (item == null || !item.hasItemMeta()) return false;
-        String displayName = item.getItemMeta().getDisplayName();
-        // Using ChatColor.stripColor helps if you use colors in your item name!
-        return displayName != null && ChatColor.stripColor(displayName).contains("Wuh's Mace");
+        if (item == null || item.getType() != Material.DIAMOND_HOE || !item.hasItemMeta()) {
+            return false;
+        }
+        
+        ItemMeta meta = item.getItemMeta();
+        // This makes it "un-fakeable" by checking the secret ID number
+        return meta != null && meta.hasCustomModelData() && meta.getCustomModelData() == 123456;
     }
 
     private boolean isFalling(Player player) {
-        // Fall distance > 0 is a very reliable way to check if they are falling/jumping
         return player.getFallDistance() > 0.0F && !player.isOnGround();
     }
 }
