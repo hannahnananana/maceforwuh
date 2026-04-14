@@ -35,20 +35,19 @@ public class MaceForWuh extends JavaPlugin implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!(sender instanceof Player)) {
-            sender.sendMessage(ChatColor.RED + "Only players can use this command!");
-            return true;
-        }
-
-        Player player = (Player) sender;
-
-        // Check for permission (optional but recommended)
-        if (!player.hasPermission("wuhsmace.give")) {
-            player.sendMessage(ChatColor.RED + "You don't have permission to use this!");
-            return true;
-        }
-
         if (command.getName().equalsIgnoreCase("wuhsmace")) {
+            if (!(sender instanceof Player)) {
+                sender.sendMessage(ChatColor.RED + "Only players can use this command!");
+                return true;
+            }
+
+            Player player = (Player) sender;
+
+            if (!player.hasPermission("wuhsmace.give")) {
+                player.sendMessage(ChatColor.RED + "You don't have permission to use this!");
+                return true;
+            }
+
             ItemStack mace = createWuhsMace();
             player.getInventory().addItem(mace);
             
@@ -69,6 +68,9 @@ public class MaceForWuh extends JavaPlugin implements CommandExecutor {
             // Set the custom name
             meta.setDisplayName(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "Wuh's Mace");
             
+            // ADDED: This connects the item to your Resource Pack texture
+            meta.setCustomModelData(123456); 
+            
             // Set the custom lore
             meta.setLore(Arrays.asList(
                 "",
@@ -80,7 +82,7 @@ public class MaceForWuh extends JavaPlugin implements CommandExecutor {
                 ChatColor.RED + "Cooldown: 30 Seconds"
             ));
 
-            // Make it look clean: Hide the fact that it's a Diamond Hoe
+            // Visual clean up
             meta.setUnbreakable(true);
             meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
             meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
