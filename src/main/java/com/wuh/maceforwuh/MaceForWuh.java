@@ -51,7 +51,7 @@ public class MaceForWuh extends JavaPlugin implements CommandExecutor {
     }
 
     public ItemStack createWuhsMace() {
-        ItemStack mace = new ItemStack(Material.MACE);
+        ItemStack mace = new ItemStack(Material.DIAMOND_HOE);
         ItemMeta meta = mace.getItemMeta();
         
         if (meta != null) {
