@@ -92,14 +92,13 @@ public class MaceListener implements Listener {
         event.setDamage(0);
     }
 
-    private boolean isMace(ItemStack item) {
-        if (item.getItemMeta() == null) {
-            return false;
-        }
-        String displayName = item.getItemMeta().getDisplayName();
-        return displayName != null && displayName.contains("Wuh's Mace");
+private boolean isWuhsMace(ItemStack item) { // <--- Changed to match line 45
+    if (item == null || !item.hasItemMeta()) {
+        return false;
     }
-
+    String displayName = item.getItemMeta().getDisplayName();
+    return displayName != null && displayName.contains("Wuh's Mace");
+}
     private boolean isFalling(Player player) {
         // Player is falling if they are not on ground and have negative Y velocity
         return !player.isOnGround() && player.getVelocity().getY() < 0;
