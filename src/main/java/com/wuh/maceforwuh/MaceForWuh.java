@@ -63,6 +63,7 @@ public class MaceForWuh extends JavaPlugin implements CommandExecutor {
         // Using Diamond Hoe as the base
         ItemStack mace = new ItemStack(Material.DIAMOND_HOE);
         ItemMeta meta = mace.getItemMeta();
+        meta.setCustomModelData(1001);
         
         if (meta != null) {
             // Set the custom name
